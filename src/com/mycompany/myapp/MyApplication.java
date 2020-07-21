@@ -57,47 +57,115 @@ public class MyApplication {
         });
     }
 
+   
+
     public void start() {
         if (current != null) {
             current.show();
             return;
         }
+        int resultat = 0;
+
+        Button btn = new Button("Commencer");
         Form F1 = new Form("Test de depistage", BoxLayout.y());
 
         Container cnt = new Container(BoxLayout.x());
-        Label lb = new Label("Question :");
-        Label Ques = new Label("Q1") ;
-        cnt.addAll(lb,Ques) ;
-        
-      
-         
-        ButtonGroup bg = new ButtonGroup();
-RadioButton option1 = RadioButton.createToggle("OUI", bg);
-RadioButton option2 = RadioButton.createToggle("Je ne sais pas", bg);
-RadioButton option3 = RadioButton.createToggle("NON", bg);
-        
-        
+        Label lb = new Label("Bienvenue ",NATIVE_MAIN_BOLD);
+        Label Ques = new Label("");
+        cnt.addAll(lb, Ques);
 
-        Button btn = new Button("valider");
-
-        F1.addAll( cnt ,option1,option2 ,option3, btn);
+//         
+//        ButtonGroup bg = new ButtonGroup();
+//RadioButton option1 = RadioButton.createToggle("OUI", bg);
+//RadioButton option2 = RadioButton.createToggle("Je ne sais pas", bg);
+//RadioButton option3 = RadioButton.createToggle("NON", bg);
+        F1.addAll(cnt, btn);
         F1.show();
-      
 
         btn.addActionListener((e) -> {
-            Form f3= new Form();
-        SpanLabel slb = new SpanLabel("");
-        f3.add(slb);
-        ServiceQuestion ServiceQuestion=new ServiceQuestion();
-        slb.setText(ServiceQuestion.getQuestion().toString());
-         
-          f3.show();
-          });
+            ButtonGroup bg = new ButtonGroup();
+            RadioButton option1 = RadioButton.createToggle("OUI", bg);
+            RadioButton option2 = RadioButton.createToggle("Je ne sais pas", bg);
+            RadioButton option3 = RadioButton.createToggle("NON", bg);
+
+            int i = 1;
 
             
+            int x =0 ;
+            Form f3 = new Form(BoxLayout.y());
+            SpanLabel slb = new SpanLabel("");
+            Container rep =new Container( BoxLayout.y());
+            rep.addAll(option1, option2, option3) ;
+            f3.addAll(slb, rep);
+
+            ServiceQuestion ServiceQuestion = new ServiceQuestion();
+           
+           // slb.setText(ServiceQuestion.getQuestion().toString());
+            while (i <= ServiceQuestion.nombrequestion()) {
+                
+                option1.setSelected(false) ;
+                option2.setSelected(false) ;
+                option3.setSelected(false) ;
+                slb.setText(ServiceQuestion.getOneQuestion(i).get(0).getQuestion().toString());
+                f3.show();
+//                boolean reponse = false ;
+//                while (reponse=false) {
+
+                if (option1.isSelected()) {
+                   
+                    //reponse=true ;
+                    x =x +5 ;
+                     ServiceQuestion.insertreponse(i, "Oui");
+                    i++;
+                    continue ;
+                   
+                    
+                }
+                if (option2.isSelected()) {
+                   ServiceQuestion.insertreponse(i, "Je ne sais pas");
+                   //  reponse=true ;
+                     i++;
+                     x +=3 ;
+                     
+                     continue;
+                     
+                }
+                if (option3.isSelected()) {
+                    ServiceQuestion.insertreponse(i, "Non");
+                     //reponse=true ;
+                    i++;
+                    continue ;
+                    
+                    
+                }
+                
+                
+                System.out.println(i+"rge  res:"+x);
+                
+            }
             
-          
-       
+                Form f4 = new Form();
+                int res = x / ServiceQuestion.nombrequestion();
+                SpanLabel slb4 = new SpanLabel("");
+                if (res >= 3) {
+                                slb4.setText("Vous etes en Danger");
+                            } else if (res < 3 && res > 1) {
+                                slb4.setText(" votre cas n'est pas critique mais ...");
+                            } else {
+                                 slb4.setText(" vous n'etes pas malade");
+                            }
+
+            
+            f4.add(slb4);
+                    f4.show();
+            
+            
+
+           
+            System.out.println(i+"rge  res:"+x);
+        });
+        // reponse 
+
     }
 
     public void stop() {

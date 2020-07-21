@@ -67,7 +67,44 @@ public ArrayList<Question> getQuestion(){
         NetworkManager.getInstance().addToQueueAndWait(con);
         return listQuestions;
     }
+public ArrayList<Question> getOneQuestion(int i){
+        listQuestions = new ArrayList<>();
+        ConnectionRequest con = new ConnectionRequest();
+        con.setUrl(PublicVars.ipAdress+""+i);  
+        con.setPost(false);
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                ServiceQuestion ser = new ServiceQuestion();
+                listQuestions = ser.parseQuestion(new String(con.getResponseData()));
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+        return listQuestions;
+    }
 //boucle qzestion
+public int nombrequestion (){
+  
+       listQuestions = new ArrayList<>();
+        ConnectionRequest con = new ConnectionRequest();
+        con.setUrl(PublicVars.ipAdress);  
+        con.setPost(false);
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                ServiceQuestion ser = new ServiceQuestion();
+                listQuestions = ser.parseQuestion(new String(con.getResponseData()));
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+        return listQuestions.size(); 
+}
+public void insertreponse(int i , String reponse){
+        listQuestions = new ArrayList<>();
+        ConnectionRequest con = new ConnectionRequest();
+        con.setUrl(PublicVars.ipAdress+"post/"+i+"/"+reponse);  
+        con.setPost(true);
+  NetworkManager.getInstance().addToQueueAndWait(con);}
 public String testquestion () {
     String question ="";
     

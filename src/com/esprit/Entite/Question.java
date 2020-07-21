@@ -40,7 +40,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question{" + "Q_id=" + Q_id + ", Question=" + Question + '}';
+        return "{" + "Q_id=" + Q_id + ", Question=" + Question + '}';
     }
     
     
